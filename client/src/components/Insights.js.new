@@ -1,0 +1,135 @@
+import React from 'react';
+
+const ambienceEmoji = {
+  forest: '🌲',
+  ocean: '🌊',
+  mountain: '⛰️'
+};
+
+const Insights = ({ insights, loading }) => {
+  const styles = {
+    container: {
+      padding: '20px'
+    },
+    title: {
+      fontSize: '24px',
+      fontWeight: 'bold',
+      color: '#f1f5f9',
+      marginBottom: '24px'
+    },
+    grid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: '16px'
+    },
+    card: {
+      backgroundColor: '#1e293b',
+      borderRadius: '12px',
+      padding: '20px',
+      border: '1px solid #334155',
+      textAlign: 'center'
+    },
+    cardLabel: {
+      fontSize: '14px',
+      color: '#94a3b8',
+      marginBottom: '8px'
+    },
+    cardValue: {
+      fontSize: '32px',
+      fontWeight: 'bold'
+    },
+    purple: { color: '#a78bfa' },
+    yellow: { color: '#fbbf24' },
+    green: { color: '#34d399' },
+    cyan: { color: '#22d3ee' },
+    keywordsSection: {
+      marginTop: '24px',
+      backgroundColor: '#1e293b',
+      borderRadius: '12px',
+      padding: '20px',
+      border: '1px solid #334155'
+    },
+    keywordsTitle: {
+      fontSize: '16px',
+      fontWeight: 'bold',
+      color: '#f1f5f9',
+      marginBottom: '12px'
+    },
+    keywordsList: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '8px'
+    },
+    keyword: {
+      backgroundColor: '#334155',
+      padding: '6px 12px',
+      borderRadius: '16px',
+      fontSize: '14px',
+      color: '#67e8f9'
+    },
+    loading: {
+      textAlign: 'center',
+      color: '#64748b',
+      padding: '40px'
+    },
+    noData: {
+      textAlign: 'center',
+      color: '#64748b',
+      padding: '40px'
+    }
+  };
+
+  if (loading) {
+    return <div style={styles.loading}>Loading insights...</div>;
+  }
+
+  if (!insights) {
+    return <div style={styles.noData}>No insights available. Create some entries first!</div>;
+  }
+
+  return (
+    <div style={styles.container}>
+      <h2 style={styles.title}>Your Journal Insights</h2>
+      
+      <div style={styles.grid}>
+        <div style={styles.card}>
+          <div style={styles.cardLabel}>Total Entries</div>
+          <div style={{...styles.cardValue, ...styles.purple}}>
+            {insights.totalEntries || 0}
+          </div>
+        </div>
+        
+        <div style={styles.card}>
+          <div style={styles.cardLabel}>Top Emotion</div>
+          <div style={{...styles.cardValue, ...styles.yellow}}>
+            {insights.topEmotion || '-'}
+          </div>
+        </div>
+        
+        <div style={styles.card}>
+          <div style={styles.cardLabel}>Favorite Ambience</div>
+          <div style={{...styles.cardValue, ...styles.green}}>
+            {insights.mostUsedAmbience ? (
+              <>
+                {ambienceEmoji[insights.mostUsedAmbience]} {insights.mostUsedAmbience}
+              </>
+            ) : '-'}
+          </div>
+        </div>
+      </div>
+      
+      {insights.recentKeywords && insights.recentKeywords.length > 0 && (
+        <div style={styles.keywordsSection}>
+          <div style={styles.keywordsTitle}>Recent Keywords</div>
+          <div style={styles.keywordsList}>
+            {insights.recentKeywords.map((keyword, index) => (
+              <span key={index} style={styles.keyword}>{keyword}</span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Insights;
